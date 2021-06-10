@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+  vuejs:
+    container_name: result-chat-client
+    image: result-chat-client
+    build:
+      context: .
+      dockerfile: docker/client.docker
+    volumes:
+      - ./:/var/www/app
+      - /var/www/app/node_modules:/var/www/node_modules
+    environment:
+      - npm_config_unsafe_perm=true
+      # https://github.com/paulmillr/chokidar
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "8080:8080"
+
+  nodejs:
+    container_name: result-chat-server
+    image: result-chat-server
+    build:
+      context: .
+      dockerfile: docker/server.docker
+    volumes:
+      - ./:/var/www/app
+      - /var/www/app/node_modules
+    environment:
+      - npm_config_unsafe_perm=true
+    ports:
+      - "3000:3000"
+  
